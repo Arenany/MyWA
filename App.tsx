@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import CategoryGrid from './components/CategoryGrid';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Lazy load below-the-fold components
 const BestSellers = lazy(() => import('./components/BestSellers'));
@@ -20,34 +21,42 @@ const SectionLoader = () => (
 
 function App() {
   return (
-    <ImageProvider>
-      <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden selection:bg-[#25D366] selection:text-white">
-        <Header />
-        <main>
-          {/* Hero and Categories are critical for LCP, keep them synchronous */}
-          <Hero />
-          <CategoryGrid />
+    <ErrorBoundary>
+      <ImageProvider>
+        <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden selection:bg-[#25D366] selection:text-white">
+          <Header />
+          <main>
+            {/* Critical Path: No Suspense/Lazy for Hero & Categories to ensure LCP is fast */}
+            <Hero />
+            <CategoryGrid />
+            
+            <ErrorBoundary>
+              <Suspense fallback={<SectionLoader />}>
+                <BestSellers />
+              </Suspense>
+            </ErrorBoundary>
+            
+            <ErrorBoundary>
+              <Suspense fallback={<SectionLoader />}>
+                <WhyChooseUs />
+              </Suspense>
+            </ErrorBoundary>
+          </main>
           
-          <Suspense fallback={<SectionLoader />}>
-            <BestSellers />
-          </Suspense>
+          <ErrorBoundary fallback={<div className="h-24 bg-slate-900 flex items-center justify-center text-slate-600">Footer failed to load</div>}>
+            <Suspense fallback={<div className="h-20 bg-slate-900" />}>
+              <Footer />
+            </Suspense>
+          </ErrorBoundary>
           
-          <Suspense fallback={<SectionLoader />}>
-            <WhyChooseUs />
+          <FloatingWhatsApp />
+          
+          <Suspense fallback={null}>
+            <AdminControl />
           </Suspense>
-        </main>
-        
-        <Suspense fallback={<div className="h-20 bg-slate-900" />}>
-          <Footer />
-        </Suspense>
-        
-        <FloatingWhatsApp />
-        
-        <Suspense fallback={null}>
-          <AdminControl />
-        </Suspense>
-      </div>
-    </ImageProvider>
+        </div>
+      </ImageProvider>
+    </ErrorBoundary>
   );
 }
 
