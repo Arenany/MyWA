@@ -57,7 +57,7 @@ const Hero: React.FC = () => {
             
             <EditableImage
               imageId="hero-main"
-              src="https://picsum.photos/id/160/1000/1000"
+              src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=1000"
               alt="Premium Mobile Accessories Collection"
               className="relative w-full h-auto rounded-3xl shadow-2xl transform transition-transform duration-700 group-hover:scale-[1.02] bg-white"
             />

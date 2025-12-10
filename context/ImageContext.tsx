@@ -3,9 +3,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 interface ImageContextType {
   images: Record<string, string>;
   isEditMode: boolean;
-  updateImage: (id: string, file: File) => void;
+  updateImage: (id: string, file: File) => Promise<void>;
   toggleEditMode: (password: string) => boolean;
   logout: () => void;
+  exportConfig: () => void;
 }
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
@@ -32,25 +33,63 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, []);
 
-  const updateImage = (id: string, file: File) => {
-    // Simple file size check (limit to ~2MB for local storage safety)
-    if (file.size > 2 * 1024 * 1024) {
-      alert("Image is too large for this demo (Max 2MB). Please pick a smaller file.");
-      return;
-    }
+  // Helper to compress image
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          // Max dimension logic
+          const MAX_WIDTH = 800; // Limit width to 800px to save space
+          const scaleSize = MAX_WIDTH / img.width;
+          const width = Math.min(MAX_WIDTH, img.width);
+          const height = img.height * (img.width > MAX_WIDTH ? scaleSize : 1);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            // Compress to JPEG with 0.7 quality
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          } else {
+            reject(new Error("Canvas context failed"));
+          }
+        };
+        img.onerror = (error) => reject(error);
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const updateImage = async (id: string, file: File) => {
+    try {
+      // 1. Compress the image first
+      const compressedBase64 = await compressImage(file);
+      
+      // 2. Update State
+      const newImages = { ...images, [id]: compressedBase64 };
+      setImages(newImages);
+      
+      // 3. Save to LocalStorage
       try {
-        const newImages = { ...images, [id]: base64 };
-        setImages(newImages);
         localStorage.setItem('interacox_images', JSON.stringify(newImages));
       } catch (e) {
-        alert("Browser storage is full. Cannot save more images in this demo.");
+        if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+          alert("Storage Limit Reached: Even compressed, you have too many custom images for browser storage. Please export your config.");
+        } else {
+          console.error("Save failed", e);
+        }
       }
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error("Image processing failed", error);
+      alert("Failed to process image. Please try another one.");
+    }
   };
 
   const toggleEditMode = (password: string) => {
@@ -68,8 +107,18 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     sessionStorage.removeItem('interacox_admin');
   };
 
+  const exportConfig = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(images));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "interacox_images_backup.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
   return (
-    <ImageContext.Provider value={{ images, isEditMode, updateImage, toggleEditMode, logout }}>
+    <ImageContext.Provider value={{ images, isEditMode, updateImage, toggleEditMode, logout, exportConfig }}>
       {children}
     </ImageContext.Provider>
   );

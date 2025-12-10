@@ -26,25 +26,25 @@ export const CATEGORIES: Category[] = [
     id: 'cables',
     title: 'USB Cables',
     description: 'Braided, Fast Charging, Durable',
-    image: 'https://picsum.photos/id/10/800/800' // Placeholder: Abstract tech
+    image: 'https://images.unsplash.com/photo-1610450829878-1c8aa8b39b85?auto=format&fit=crop&q=80&w=800' // White USB Cable coil
   },
   {
     id: 'chargers',
     title: 'Fast Chargers',
     description: '20W - 100W GaN Technology',
-    image: 'https://picsum.photos/id/20/800/800' // Placeholder: Tech item
+    image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&q=80&w=800' // White Power Adapter
   },
   {
     id: 'earbuds',
-    title: 'TWS Earbuds',
+    title: 'TWS & Audio',
     description: 'ANC, Transparency Mode, Hifi',
-    image: 'https://picsum.photos/id/30/800/800' // Placeholder: White gadget
+    image: 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?auto=format&fit=crop&q=80&w=800' // Silver/White Over-ear Headphones (AirPods Max style)
   },
   {
     id: 'cases',
     title: 'Phone Cases',
     description: 'Silicone, Leather, MagSafe',
-    image: 'https://picsum.photos/id/40/800/800' // Placeholder: Colorful
+    image: 'https://images.unsplash.com/photo-1603351154351-5cf9972a93d8?auto=format&fit=crop&q=80&w=800' // Colorful iPhone Cases
   }
 ];
 
@@ -53,28 +53,28 @@ export const BEST_SELLERS: Product[] = [
     id: 'p1',
     name: 'AirPods Pro 2 Gen (ANC)',
     category: 'Earbuds',
-    image: 'https://picsum.photos/id/146/600/600',
+    image: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&q=80&w=600', // White Earbuds with case
     badge: 'Best Seller'
   },
   {
     id: 'p2',
     name: '20W USB-C Power Adapter',
     category: 'Chargers',
-    image: 'https://picsum.photos/id/2/600/600',
+    image: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=600', // Apple Style Charger
     badge: 'In Stock'
   },
   {
     id: 'p3',
-    name: 'MagSafe Clear Case iPhone 15',
+    name: 'MagSafe Leather Case',
     category: 'Cases',
-    image: 'https://picsum.photos/id/3/600/600',
+    image: 'https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&q=80&w=600', // Premium Cases
     badge: 'Hot'
   },
   {
     id: 'p4',
     name: 'Braided C-to-C Cable (2m)',
     category: 'Cables',
-    image: 'https://picsum.photos/id/4/600/600',
+    image: 'https://plus.unsplash.com/premium_photo-1664194583917-b089c8c9a3eb?auto=format&fit=crop&q=80&w=600', // Clean white cable
   }
 ];
 
