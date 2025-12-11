@@ -2,12 +2,6 @@ import React from 'react';
 import { FEATURES } from '../constants';
 import { ShieldCheck, Truck, Zap, Factory } from 'lucide-react';
 
-const icons = [Factory, ShieldCheck, ShieldCheck, Truck]; 
-// Note: Lucide icons mapped by index. 
-// 0: Factory Direct -> Factory
-// 1: Experience -> ShieldCheck (used twice for simplicity or map specifically)
-// Let's create a specific mapping inside the component loop for better accuracy.
-
 const WhyChooseUs: React.FC = () => {
   const getIcon = (index: number) => {
     switch(index) {

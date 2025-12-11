@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useImages } from '../context/ImageContext';
-import { Lock, Unlock, LogOut, Settings, Download, Save } from 'lucide-react';
+import { Lock, LogOut, Settings, Save } from 'lucide-react';
 
 const AdminControl: React.FC = () => {
   const { isEditMode, toggleEditMode, logout, exportConfig } = useImages();
@@ -22,14 +22,14 @@ const AdminControl: React.FC = () => {
   if (isEditMode) {
     return (
       <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-3">
-        {/* Export Button */}
+        {/* Save/Export Button */}
         <button 
           onClick={exportConfig}
           className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors group flex items-center gap-0 hover:gap-2 hover:px-4 duration-300 overflow-hidden"
-          title="Download Image Backup"
+          title="Save Changes (Download Config)"
         >
-          <Download size={20} />
-          <span className="w-0 overflow-hidden group-hover:w-auto transition-all whitespace-nowrap text-sm font-medium">Backup Data</span>
+          <Save size={20} />
+          <span className="w-0 overflow-hidden group-hover:w-auto transition-all whitespace-nowrap text-sm font-medium">Save Changes</span>
         </button>
 
         {/* Logout Button */}
